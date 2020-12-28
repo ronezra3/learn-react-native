@@ -1,6 +1,7 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+
 
 const Item = ({ title }) => (
   <View style={styles.item}>
@@ -22,16 +23,39 @@ export default function App() {
 
     setRepos(readyResponse)
 
-
   }, [])
 
   const renderItem = ({ item }) => (
     <Item title={item.name} />
   );
 
+  const [selectedValue, setSelectedValue] = useState("java");
+
+
+
+  const serviceItems = repos.map((repo, i) => {
+    
+    return <Picker.Item key={repo.name} value={repo.name} label={repo.name} />
+  });
+
 
   return (
     <View style={styles.container}>
+      <Picker
+        selectedValue={selectedValue}
+
+        style={{ height: 50, width: 150 }}
+
+        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+      >
+
+        <Picker.Item label="Java" value="java" />
+
+        <Picker.Item label="JavaScript" value="js" />
+        {serviceItems}
+      </Picker>
+
+
       <FlatList
         data={repos}
         renderItem={renderItem}
