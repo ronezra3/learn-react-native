@@ -1,49 +1,60 @@
-import React from 'react';
-import { StyleSheet, Text, View, Button, TextInput, Image } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
+
+const Item = ({ title }) => (
+  <View style={styles.item}>
+    <Text style={styles.title}>{title}</Text>
+  </View>
+);
+
+
+
 
 export default function App() {
 
+  const [repos, setRepos] = useState([])
 
 
+  useEffect(async () => {
+    const res = await fetch('https://api.github.com/users/ronezra3/repos')
+    const readyResponse = await res.json()
 
-  const [text, setText] = React.useState('Useless Placeholder');
+    setRepos(readyResponse)
 
 
-  function fn() {
-    console.log(text)
-  }
+  }, [])
+
+  const renderItem = ({ item }) => (
+    <Item title={item.name} />
+  );
+
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-        onChangeText={inputValue => { setText(inputValue) }}
-        value={text}
+      <FlatList
+        data={repos}
+        renderItem={renderItem}
+        keyExtractor={xx => xx.name}
       />
-
-      <Image source={require('./cat.jpg')} style={styles.image} />
-      <Button title="click" onPress={fn} />
-      <View>
-        <Text>Hello</Text>
-      </View>
-      <Text>Open up App.js to start working on your app!!!!!</Text>
     </View>
   );
 }
 
-const styles = StyleSheet.create(
-  {
-
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'space-around',
-
-    },
-
-    image: {
-      height: 100, width: 100
-    }
-  }
-);
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  item: {
+    backgroundColor: '#f9c2ff',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
+  title: {
+    fontSize: 32,
+  },
+});
