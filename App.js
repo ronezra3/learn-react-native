@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { NativeRouter, Route, Link } from "react-router-native";
+
+
+import ListComp from './ListComp';
+import Home from './Home';
+import Contact from './Contact';
+
 
 
 const Item = ({ title }) => (
@@ -40,28 +47,35 @@ export default function App() {
 
 
   return (
+    <NativeRouter>
     <View style={styles.container}>
-      <Picker
-        selectedValue={selectedValue}
 
-        style={{ height: 50, width: 150 }}
+      <View style={styles.nav}>
+        <Link to="/Home" underlayColor="#f0f4f7">
+          <Text>Home</Text>
+        </Link>
+        <Link
+          to="/contact"
+          underlayColor="#f0f4f7"
+          
+        >
+          
+          <Text>Contact</Text>
+        </Link>
+        <Link
+          to="/listcomp"
+          underlayColor="#f0f4f7" >
+          <Text>ListComp</Text>
+        </Link>
 
-        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-      >
+      </View>
 
-        <Picker.Item label="Java" value="java" />
-
-        <Picker.Item label="JavaScript" value="js" />
-        {serviceItems}
-      </Picker>
-
-
-      <FlatList
-        data={repos}
-        renderItem={renderItem}
-        keyExtractor={xx => xx.name}
-      />
+      <Route exact path="/home" component={Home} />
+      <Route path="/contact" component={Contact} />
+      <Route path="/listcomp" component={ListComp} />
     </View>
+  </NativeRouter>
+
   );
 }
 
